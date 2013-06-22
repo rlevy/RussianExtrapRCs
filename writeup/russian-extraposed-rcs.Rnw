@@ -1,0 +1,68 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{natbib}
+
+\begin{document}
+
+
+
+\section{Experiment}
+\label{sec:experiment}
+
+
+
+\subsection{Participants}
+
+Sixteen native Russian speakers living in or visiting the United
+States participated in this experiment at the University of California
+at San Diego for cash compensation.  None had arrived in the United
+States before age 13, and all reported that they continue to use
+Russian on a regular basis and consider it the language they are most
+comfortable with.
+% 2.2.1. Materials
+
+\subsection{Materials}
+
+
+Twenty items (listed in full in XXX) were constructed following XXX
+pattern.  Each participant saw only one of the four conditions of each
+item according to a Latin square design.  These experimental stimuli
+were interleaved with 32 items from an unrelated experiment and 52
+random fillers such that no two experimental sentences were seen
+consecutively.
+
+
+\subsection{Procedure}
+\label{sec:procedure}
+
+
+Sentences were presented to participants in a non-cumulative
+word-by-word moving-window self-paced procedure on a PC laptop
+computer running the Linger software \citep{rohde:lingermanual}. Each
+trial began with a series of dashes displayed on the computer screen
+in place of the words in the sentence. The first press of the space
+bar revealed the first word in the sentence, and each subsequent press
+of the space bar revealed the next word in the sentence and masked the
+previous word. Punctuation was displayed together with the word
+preceding it.  The times between button presses were recorded to the
+nearest millisecond.  Each sentence was followed by a yes-or-no
+comprehension question probing the participant's understanding of the
+content of the sentence.  Written instructions in Russian were given
+at the outset of the experiment.
+
+
+
+
+\bibliographystyle{apalike}
+\bibliography{russian-extraposed-rcs}
+
+
+
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
