@@ -1,0 +1,386 @@
+log(x/(1-x))
+x = .01
+log(x/(1-x))
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);
+biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]
+biography
+biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")
+biography
+biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")
+xtabs(~Subject+Experiment,data=data)
+rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biograhical informationxtabs(~Subject+Experiment,data=results)
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biograhical information
+xtabs(~Subject+Experiment,data=results)
+biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")
+colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]
+short.biography
+pretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(accuracy[,1] > 2))
+hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))## Preprocessing of subjects. First check plausibi
+sponse=c("खाया था","पढ़ा था","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans),ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)### Process datadata = merg
+e(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))
+f.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+rt.means = tapply(data$RT,list(data$Subject,data$Experiment),mean,na.rm=T)colMeans(rt.means,na.rm=T)sd(rt.means)/sqrt(length(good.subjs))
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr+Int|Subject)+(1+Agr+Int|Item),data=data,family="binomial")
+big.model
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1|Subject)+(0+Agr|Subject)+(0+Int|Subject)+(1|Item)+(0+Agr|Item)+(0+Int|Item),data=data,family="binomial")
+big.model
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr+Int|Subject)+(1|Item)+(0+Agr|Item)+(0+Int|Item),data=data,family="binomial")
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr+Int|Subject)+(1|Item),data=data,family="binomial")
+big.model
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1|Item),data=data,family="binomial")
+big.model
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model
+f.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+f.means
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/Dropbox/Current Work/Hindi Agreement/Experiment4/Results/data.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## separate biographical info and experiment stuff:biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]## get hindi native speakers:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]## subs
+et data, limit to hindi speakers, tag with gender infodata = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))#
+ थे","देखा था","देख रहे थे","देख रहा था","नहलाया था","नहलाये थे","नहला रहा था","नहला रहे थे","नहलाये थे","नहलाया था","नहला रहे थे","नहला रहा था","देखा था","देखे थे","देख रहा था","देख रहे थे"),Answer=c(rep(c("CCA", "RA", "CCA", "RA", "RA", "CCA", "RA", "CCA"),5),rep(c("RA", "CCA", "RA", "CCA", "CCA", "RA", "CCA", "RA"),5)),CCA=c(rep(c(1, 0, 1, 0, 0, 1, 0, 1),5),rep(c(0, 1, 0, 1, 1, 0, 1, 0),5)))condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Order=c("F","M","F","M"))item.key = data.frame(Item=c(1:10),Head=c(rep("M-Case",5),rep("F-Case",5)))#
+ा","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))data = merge(data,code.key, by.y=c("Item","Experiment","Response"),by.x=c("Item","Experiment","Response"))data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))data = merge(data,item.key, by.y=c("Item"),by.x=c("Item"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))mean(tapply(fillers$CCA,fillers$Subject,length))mean(tapply(data$CCA,data$Subject,length))subj.means = tapply(fillers$CCA,fillers$Subject,mean)good.subjs = names(which(subj.means > .59))data = drop.levels(subset(data,Subject %in% good.subjs))colSums(xtabs(~S
+ubject+Experiment,data=drop.levels(subset(results,Item==1&Element==0&Subject%in%good.subjs))))#
+data$RT = as.integer(as.character(data$RT))data$CCA = as.integer(as.character(data$CCA))xtabs(~Experiment+Item,data=data)#
+## For table 1cca.means = tapply(data$CCA,list(data$Subject,data$Experiment),mean)colMeans(cca.means,na.rm=T)## For table 1, conditions A/Capply(cca.means,2,sd,na.rm=T)/sqrt(length(which(!is.na(cca.means[,1]))))apply(cca.means,2,sd,na.rm=T)/sqrt(length(which(!is.na(cca.means[,2]))))
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);
+biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);
+biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]
+short.biography
+pretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)
+accuracy
+bad.subjs = names(which(accuracy[,1] > 2))
+hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))
+ा","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans),ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)
+length(good.subjs)
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))
+Present by condition meansf.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr+Int|Subject)+(1+Agr+Int|Item),data=data,family="binomial")
+big.model
+xtabs(~Subject+Experiment,data=data)### Empirical logit ANOVA analysislogit = function(x){if (x==0){x = x+0.01}if (x==1){x = x-0.01}return(log(x/(1-x)))}data.bysubj = ddply(data,.(Subject,Agr,Int),summarize,meanRT=mean(RT),meanF=mean(Feature),meanLogit=logit(mean(Feature)))anova = ezANOVA(data.bysubj, dv=.(meanLogit),within=.(Agr,Int),wid=.(Subject))
+anova
+xtabs(~Item+Experiment,data=data)### Empirical logit ANOVA analysislogit = function(x){if (x==0){x = x+0.01}if (x==1){x = x-0.01}return(log(x/(1-x)))}data.bysubj = ddply(data,.(Subject,Agr,Int),summarize,meanRT=mean(RT),meanF=mean(Feature),meanLogit=logit(mean(Feature)))anova = ezANOVA(data.bysubj, dv=.(meanLogit),within=.(Agr,Int),wid=.(Subject))
+anova
+Below is analysis of RT data. big.model = lmer(RT~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data)anova = ezANOVA(data.bysubj, dv=.(meanRT),within=.(Agr,Int),wid=.(Subject))
+anova
+o.agreers
+rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questionspretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(accuracy[,1] > 0))
+hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))
+data$RT = as.integer(as.character(data$RT))
+f.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+rt.means = tapply(data$RT,list(data$Subject,data$Experiment),mean,na.rm=T)colMeans(rt.means,na.rm=T)sd(rt.means)/sqrt(length(good.subjs))## Below is analysis of feature data. First, logistic LME modelcontrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);
+pretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(accuracy[,1] > 0))## Get Hindi native speakers and use to filter data:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=
+1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))## Preprocessing of subjects. First check plausibility scores, then check accuracy on F fillers.filler.key=data.frame(Sentence=c("उस अालसी सम्पादिका ने एक भी लेख नहीं", "उस अालसी सम्पादिका ने एक भी लेख नहीं","एक परिश्रमी ठेलेवाला खाली बोतलों को","एक परिश्रमी ठेलेवाला खाली बोतलों को","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","वह किताब जो नये टीचर को पसंद है बहुत",
+"वह किताब जो नये टीचर को पसंद है बहुत","वह मोची  नये तरह के जूते","वह मोची  नये तरह के जूते","एक नर्स ने एक दर्ज़ी और एक दाई को","एक नर्स ने एक दर्ज़ी और एक दाई को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक बच्चा और एक अभिनेत्री एक आदमी को","एक बच्चा और एक अभिनेत्री एक आदमी को","उस गवाह से झूठी गवाही नहीं","उस गवाह से झूठी गवाही नहीं","नर्स ने उस मरीज़ और उसकी बहि
+न को बाज़ार में","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में"), Acc = c(0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0), Response=c("खाया था","पढ़ा था","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans)
+,ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))data = drop.levels(subset(data,Subject %in% good.subjs))
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questionspretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(accuracy[,1] > 0))## Get Hindi native speakers and use t
+o filter data:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))## Preprocessing of subjects. Firs
+t check plausibility scores, then check accuracy on F fillers.filler.key=data.frame(Sentence=c("उस अालसी सम्पादिका ने एक भी लेख नहीं", "उस अालसी सम्पादिका ने एक भी लेख नहीं","एक परिश्रमी ठेलेवाला खाली बोतलों को","एक परिश्रमी ठेलेवाला खाली बोतलों को","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","वह किताब जो नये टीचर को पसंद है बहुत","वह किताब जो नये टीचर को पसंद है बहुत","वह मोची  नये तरह के जूते","वह मोची  नये त
+रह के जूते","एक नर्स ने एक दर्ज़ी और एक दाई को","एक नर्स ने एक दर्ज़ी और एक दाई को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक बच्चा और एक अभिनेत्री एक आदमी को","एक बच्चा और एक अभिनेत्री एक आदमी को","उस गवाह से झूठी गवाही नहीं","उस गवाह से झूठी गवाही नहीं","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में"), Acc = c(0,1,0,1,0,1,0,1,0,1,1,0,1,0,
+1,0,1,0,1,0), Response=c("खाया था","पढ़ा था","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans),ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))
+length(levels(data$Subject))
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questionspretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(accuracy[,1] > 0))## Get Hindi native speakers and use t
+o filter data:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))## Preprocessing of subjects. Firs
+t check plausibility scores, then check accuracy on F fillers.filler.key=data.frame(Sentence=c("उस अालसी सम्पादिका ने एक भी लेख नहीं", "उस अालसी सम्पादिका ने एक भी लेख नहीं","एक परिश्रमी ठेलेवाला खाली बोतलों को","एक परिश्रमी ठेलेवाला खाली बोतलों को","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","वह किताब जो नये टीचर को पसंद है बहुत","वह किताब जो नये टीचर को पसंद है बहुत","वह मोची  नये तरह के जूते","वह मोची  नये त
+रह के जूते","एक नर्स ने एक दर्ज़ी और एक दाई को","एक नर्स ने एक दर्ज़ी और एक दाई को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक बच्चा और एक अभिनेत्री एक आदमी को","एक बच्चा और एक अभिनेत्री एक आदमी को","उस गवाह से झूठी गवाही नहीं","उस गवाह से झूठी गवाही नहीं","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में"), Acc = c(0,1,0,1,0,1,0,1,0,1,1,0,1,0,
+1,0,1,0,1,0), Response=c("खाया था","पढ़ा था","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans),ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)### Process d
+atadata = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))##length(levels(data$Subject))
+f.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questionspretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(accuracy[,1] > 1))## Get Hindi native speakers and use to filter data:hindi.speakers = short.biogra
+phy$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))## Preprocessing of subjects. First check plausibility scores, then check accur
+acy on F fillers.filler.key=data.frame(Sentence=c("उस अालसी सम्पादिका ने एक भी लेख नहीं", "उस अालसी सम्पादिका ने एक भी लेख नहीं","एक परिश्रमी ठेलेवाला खाली बोतलों को","एक परिश्रमी ठेलेवाला खाली बोतलों को","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","जो तोहफ़ा उस लड़की ने खरीदा था वह तोहफ़ा काफ़ी","वह किताब जो नये टीचर को पसंद है बहुत","वह किताब जो नये टीचर को पसंद है बहुत","वह मोची  नये तरह के जूते","वह मोची  नये तरह के जूते","एक नर्
+स ने एक दर्ज़ी और एक दाई को","एक नर्स ने एक दर्ज़ी और एक दाई को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक कबाड़ीवाले ने एक अध्यापक और एक धोबिन को","एक बच्चा और एक अभिनेत्री एक आदमी को","एक बच्चा और एक अभिनेत्री एक आदमी को","उस गवाह से झूठी गवाही नहीं","उस गवाह से झूठी गवाही नहीं","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में","नर्स ने उस मरीज़ और उसकी बहिन को बाज़ार में"), Acc = c(0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,1,0), Response=c("खाया था
+","पढ़ा था","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans),ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)### Process datadata = merge(data,condition.key, by.y=c(
+"Experiment"),by.x=c("Experiment"))data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))##length(levels(data$Subject))## Present by condition meansf.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model
+rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questionspretest = drop.levels(subset(results,Experiment=="pre-test"))accuracy = xtabs(~Subject+Response,data=pretest)
+accuracy
+pretest = drop.levels(subset(results,Experiment=="pre-test" & Sentence == "Question 4"))
+accuracy = xtabs(~Subject+Response,data=pretest)
+accuracy
+rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questions. Reject people who did not correctly answer object agreement offline trial.pretest = drop.levels(subset(results,Experiment=="pre-test" & Sentence == "Question 4"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(
+accuracy[,1] > 0))
+hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))## Preprocessing of subjects. First check plausibi
+lity scores, then check accuracy on F fillers.
+length(levels(data$Subject))
+Present by condition meansf.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+ा","काट रहा था","उठा रहा था","पागल था","महंगा था","कड़वी है","दिलचस्प है" ,"फाड़ेगा","बनायेगा","हँसाया","पकाया","डाँटा","पढ़ा","नचा रहे हैं","खोल रहे हैं","दी गयी","ली गयी","देखा था","पीटा था"))fillers = merge(fillers,filler.key, by.y=c("Response"),by.x=c("Response"))subj.means = tapply(fillers$Acc,fillers$Subject,mean)good.plaussubjs = names(which(subj.means > .5))subj.agrmeans = tapply(agr.fillers$Feature,list(agr.fillers$Experiment,agr.fillers$Subject),mean)o.agreers = data.frame(Subject=colnames(subj.agrmeans),ObjectAgr=subj.agrmeans[2,],SubjectAgr=subj.agrmeans[1,])good.agrsubjs = o.agreers$Subject[which(o.agreers$ObjectAgr> .5)]good.subjs = intersect(good.plaussubjs,good.agrsubjs)
+o.agreers
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questions. Reject people who did not correctly answer object agreement offline trial.pretest = drop.levels(subset(results,Experiment=="pre-test" & Sentence == "Question 4"))accuracy = xtabs(~Subject+Re
+sponse,data=pretest)bad.subjs = names(which(accuracy[,1] > 0))## Get Hindi native speakers and use to filter data:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("
+Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))### data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))### data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))
+length(levels(data$Subject))
+f.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questions. Reject people who did not correctly answer object agreement offline trial.pretest = drop.levels(subset(results,Experiment=="pre-test" & Sentence == "Question 4"))accuracy = xtabs(~Subject+Response,data=pretest)bad.subjs = names(which(
+accuracy[,1] > 0))## Get Hindi native speakers and use to filter data:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))
+data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))### data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))### data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))##length(levels(data$Subject))## Present by condition meansf.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model
+library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results_2.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biographical informationbiography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]### Get accuracy on pre-trial questions. Reject people who did not correctly answer object agreement offline trial.pretest = drop.levels(subset(results,Experiment=="pre-test" & Sentence == "Question 4"))accuracy = xtabs(~Subject+Re
+sponse,data=pretest)bad.subjs = names(which(accuracy[,1] > 0))## Get Hindi native speakers and use to filter data:hindi.speakers = short.biography$Subject[grep("([hH][iI][nN][dD][iI])|(हिंदी)|(हिन्दी)|(ःइन्दि)|(हिन्दि)",short.biography$Native)]data = drop.levels(subset(results, Response != "NULL" & Experiment != "f-oa" & Experiment != "f" & Experiment != "f-sa" & !(Subject %in% bad.subjs) & (Subject %in% hindi.speakers) & Element == 1 & Experiment != "consent" & Experiment != "exit" & Experiment != "prepractice"))fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & Experiment == "f"))agr.fillers = drop.levels(subset(results,Subject %in% hindi.speakers & Element == 1 & (Experiment == "f-oa" | Experiment == "f-sa")))data$Feature = 0data$Feature[grep("थी",data$Response)]=1agr.fillers$Feature = 0agr.fillers$Feature[grep("थी",agr.fillers$Response)]=1condition.key = data.frame(Experiment=c("hindi-a","hindi-b","hindi-c
+","hindi-d"),Agr=c("Object","Object","Subj","Subj"),Int=c("NoInt","Int","NoInt","Int"))
+data = merge(data,condition.key, by.y=c("Experiment"),by.x=c("Experiment"))### data = merge(data,o.agreers, by.y=c("Subject"),by.x=c("Subject"))### data = drop.levels(subset(data,Subject %in% good.subjs))data$RT = as.integer(as.character(data$RT))
+length(levels(data$Subject))
+f.means = tapply(data$Feature,list(data$Subject,data$Experiment),mean)colMeans(f.means,na.rm=T)
+contrasts(data$Agr) = contr.sum(levels(data$Agr))contrasts(data$Int) = contr.sum(levels(data$Int))data$Subject = as.factor(data$Subject)data$Item = as.factor(data$Item)### big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+sd(f.means)/sqrt(length(levels(data$Subject)))
+big.model = lmer(Feature~Agr*Int+(1+Agr*Int|Subject)+(1+Agr*Int|Item),data=data,family="binomial")
+big.model = lmer(Feature~Agr*Int+(1+Agr+Int|Subject)+(1+Agr+Int|Item),data=data,family="binomial")
+big.model
+library(Hmisc)library(reshape)library(sciplot)library(languageR)library(MASS)library(ez)library(xtable)library(ggplot2)library("ggthemes")### Load data, set up region key data frame## Condition key## 1 / NP-tul-i/ NP-ga/ PP/ caki-tul-ul/ Adv/ V1/ V2./\n## 2/ NP-tul-i/ NP-ga/ PP/ casin-tul-ul/ Adv/ V1/ V2./\n## 3 / NP-ga/ NP-tul-i/ PP/ caki-tul-ul/ Adv/ V1/ V2./\n## 3/ NP-ga/ NP-tul-i/ PP/ casin-tul-ul/ Adv/ V1/ V2./\n## Region labels "NP1","NP2","PP","REFL","ADV","V1",V2"data = read.table('~/AeroFS/Studies/Caki/EyetrackingAnalysis/output.data.txt',header=T)
+test = subset(data,fixationtype=='pr'&region==4)xtabs(~subj+cond,data=test)
+Merge main data frame with condition and factor labels, as well as ROIsmy.factors.contr = matrix(data=c(1,2,3,4,'LD','LD','Local','Local','caki','casin','caki','casin'),nrow=4,ncol=3)colnames(my.factors.contr) = c("cond","distance","anaphor")data = merge(data,my.factors.contr,by.x='cond',by.y='cond')data = merge(data,my.regions,by.x='region',by.y='region')
+my.regions = data.frame(region=c(1:7),ROI=c("NP1","NP2","PP","REFL","ADV","V1","V2"))
+data = merge(data,my.regions,by.x='region',by.y='region')
+rm(list=ls())data = read.table('~/AeroFS/Studies/Caki/EyetrackingAnalysis/output.data.txt',header=T)my.regions = data.frame(region=c(1:7),ROI=c("NP1","NP2","PP","REFL","ADV","V1","V2"))### Check that Latin squaring is right### test = subset(data,fixationtype=='pr'&region==4)xtabs(~subj+cond,data=test)### Merge main data frame with condition and factor labels, as well as ROIsmy.factors.contr = matrix(data=c(1,2,3,4,'LD','LD','Local','Local','caki','casin','caki','casin'),nrow=4,ncol=3)colnames(my.factors.contr) = c("cond","distance","anaphor")data = merge(data,my.factors.contr,by.x='cond',by.y='cond')data = merge(data,my.regions,by.x='region',by.y='region')
+data$subj=as.factor(data$subj)data$item=as.factor(data$item)data$region = as.factor(data$region)data$cond = as.factor(data$cond)data$logval = log(data$value)data$length = data$Xstart-data$Xenddata$ROI = factor(data$ROI,levels = c("NP1","NP2","PP","REFL","ADV","V1","V2"))
+data = subset(data, !(fixationtype=="fp"&value >= 2000) )data$value[row.names(subset(data,value == 'NA'&fixationtype=="rr"))] = 0
+Remove any remaning NAsdata = subset(data,value != 'NA')data.bysubjs = ddply(data,.(subj,fixationtype,cond,ROI),summarize,value=mean(value))
+data.bysubjs = ddply(data,.(subj,fixationtype,cond,ROI),summarize,value=mean(value))
+library(Hmisc)library(reshape)library(sciplot)library(languageR)library(MASS)library(ez)library(xtable)library(ggplot2)
+data.bysubjs = ddply(data,.(subj,fixationtype,cond,ROI),summarize,value=mean(value))
+head(data)
+library(Hmisc)library(reshape)library(sciplot)library(languageR)library(MASS)library(ez)library(xtable)library(ggplot2)library("ggthemes")
+rm(list=ls())data = read.table('~/AeroFS/Studies/Caki/EyetrackingAnalysis/output.data.txt',header=T)my.regions = data.frame(region=c(1:7),ROI=c("NP1","NP2","PP","REFL","ADV","V1","V2"))### Check that Latin squaring is right### test = subset(data,fixationtype=='pr'&region==4)xtabs(~subj+cond,data=test)### Merge main data frame with condition and factor labels, as well as ROIsmy.factors.contr = matrix(data=c(1,2,3,4,'LD','LD','Local','Local','caki','casin','caki','casin'),nrow=4,ncol=3)colnames(my.factors.contr) = c("cond","distance","anaphor")data = merge(data,my.factors.contr,by.x='cond',by.y='cond')data = merge(data,my.regions,by.x='region',by.y='region')### Variables need to get typed; compute log RTs and length. Also set the order on the ROIs for graphing purposes.data$subj=as.factor(data$subj)data$item=as.factor(data$item)data$region = as.factor(data$region)data$cond = as.factor(data$cond)data$logval = log(data$value)data$length = data$Xstart-data$Xenddata$ROI = factor(data$ROI,l
+evels = c("NP1","NP2","PP","REFL","ADV","V1","V2"))### Filter out long FPs, and enter 0 re-reading times for trials with no re-reading:data = subset(data, !(fixationtype=="fp"&value >= 2000) )data$value[row.names(subset(data,value == 'NA'&fixationtype=="rr"))] = 0### Remove any remaning NAsdata = subset(data,value != 'NA')data.bysubjs = ddply(data,.(subj,fixationtype,cond,ROI),summarize,value=mean(value))
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='pr'),ylim=c(0,1),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='ff'),ylim=c(0,400),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='fp'),ylim=c(0,400),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rb'),ylim=c(0,400),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rp'),ylim=c(0,600),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rp'),ylim=c(0,700),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rb'),ylim=c(0,700),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rr'),ylim=c(0,700),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rr'),ylim=c(0,1000),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='tt'),ylim=c(0,1000),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='tt'),ylim=c(0,15000),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='tt'),ylim=c(0,1500),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rr'),ylim=c(0,1000),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rb'),ylim=c(0,1000),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rp'),ylim=c(0,1000),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rp'),ylim=c(0,1500),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='rp'),ylim=c(0,2500),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+bargraph.CI(x.factor = ROI, response = value,group = cond, data = subset(data.bysubjs,fixationtype=='pr'),ylim=c(0,1),col=c("grey15","grey15","grey65","grey65"),angle=45,density=c(250,10,250,10),bty='n', xlab='',ylab='RT')
+library(lmer)
+library(lme4)
+?lmer
+sd(c(1:10))
+sd(rbind(c(1:10),c(11:20))
+)
+sd(cbind(c(1:10),c(11:20)))
+mainpath = "~/AeroFS/Drafts/RussianExtrapRCs/writeup"setwd(mainpath)files = dir(paste(mainpath,"/Results",sep=""), pattern = "dat", full.names=TRUE, recursive=FALSE)source('SPRfnx.R')data = {}for (f in files){	print(f)	data = rbind(data,read.table(f,header=F,fileEncoding="latin1"))}colnames(data) = c("subj","exp","item","cond","pos","word","region","value")data$subj = as.factor(data$subj)data$item = as.factor(data$item)data = subset(data,exp=="ExtrapRus")# create factorscondlabels = strsplit(as.character(data$cond),split="_")data$structure = as.factor(unlist(condlabels)[2*(1:length(data$cond))-1])data$locality = as.factor(unlist(condlabels)[2*(1:length(data$cond))])contrasts(data$structure) = contr.sum(levels(data$structure))/2contrasts(data$locality) = contr.sum(levels(data$locality))/2
+acc.data = drop.levels(subset(data,pos=="?" & exp=='ExtrapRus'))
+library(xtable)library(sciplot)library(languageR)library(gdata)library(ez)
+acc.data = drop.levels(subset(data,pos=="?" & exp=='ExtrapRus'))
+head(acc.data)
+str(acc.data)
+acc.data$region = as.integer(as.character(acc.data$region))
+str(acc.data)
+acc.model = lmer(region~structure*locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=acc.data,family="binomial")
+acc.model
+tapply(acc.data$region,acc.data$condition,mean)
+tapply(acc.data$region,acc.data$cond,mean)
+acc.model = lmer(region~structure*locality+(1|subj)+(1|item),data=acc.data,family="binomial")
+acc.model
+acc.model = lmer(region~structure*locality+(1+structure+locality|subj)+(1|item),data=acc.data,family="binomial")
+acc.model = lmer(region~structure*locality+(1+structure+locality|subj)+(1+ structure+locality |item),data=acc.data,family="binomial")
+acc.model
+acc.means.bysubj = ddply(acc.data,.(subj,structure,locality),summarize,meanAcc=mean(region))#
+acc.means = ddply(acc.means.bysubj,.(structure,locality),summarize,meanAcc=mean(meanAcc), accSE=sd(meanAcc)/sqrt(length(levels(data$subj))))
+acc.means
+table.means = round(with(subset(acc.means.bysubj),tapply(meanRT,list(structure,locality),mean)),digits=1)
+table.means = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),mean)),digits=1)
+table.means
+table.means = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),mean)),digits=2)
+table.means
+table.means = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),mean)),digits=2)#
+table.ses = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),sd))/sqrt(length(levels(data$subj))),digits=2)#
+means.table = matrix(as.vector(#
+			paste(table.means," (",as.vector(table.ses),")", sep="")#
+             ), ncol=ncol(table.means))
+means.table
+col.names(means.table) = c("Local","Non-local")#
+row.names(means.table) = c("NP","VP")
+colnames(means.table) = c("Local","Non-local")
+means.table
+xtable(means.table,caption = "Mean accuracy in each region for Experiment 1. By-participant standard errors in parentheses.")
+library(xtable)library(sciplot)library(languageR)library(gdata)library(ez)# load datamainpath = "~/AeroFS/Drafts/RussianExtrapRCs/writeup"setwd(mainpath)files = dir(paste(mainpath,"/Results",sep=""), pattern = "dat", full.names=TRUE, recursive=FALSE)source('SPRfnx.R')data = {}for (f in files){	print(f)	data = rbind(data,read.table(f,header=F,fileEncoding="latin1"))}colnames(data) = c("subj","exp","item","cond","pos","word","region","value")data$subj = as.factor(data$subj)data$item = as.factor(data$item)data = subset(data,exp=="ExtrapRus")# create factorscondlabels = strsplit(as.character(data$cond),split="_")data$structure = as.factor(unlist(condlabels)[2*(1:length(data$cond))-1])data$locality = as.factor(unlist(condlabels)[2*(1:length(data$cond))])contrasts(data$structure) = contr.sum(levels(data$structure))/2contrasts(data$locality) = contr.sum(levels(data$locality))/2## Accuracy analysis: acc.data = drop.levels(subset(data,pos=="?" & exp=='ExtrapRus'))acc.data$region = as.integer(as.character(acc.data$region))acc.model = lmer(region~structure*locality+(1+structure+locality|subj)+(1+ structure+locality |item),data=acc.data,family="binomial")#
+data = drop.levels(subset(data,pos != "?"))data$pos = as.integer(as.character(data$pos))# check Latin Square is correct; check (7/31)xtabs(~subj+cond,data=subset(data,pos==0))### outlier removal### removed observations greater than 5000, less than 100; adopting thresholds from other russian paperN = nrow(data)data = subset(data,value < 5000 & value > 100)data = zscore(data,cutoff=3)trim.percentage = round((1-nrow(data)/N)*100,digits=1)data$pos = data$pos + 1# lme modeling#
+lmeModels = list()for (curPos in 1:9) {	lmeModels[[curPos]] = lmer(value~structure*locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=subset(data,pos==curPos))}#
+## region 3 does not converge with maximal RE structure; most maximal converging model removes interaction term random slope:lmeModels[[3]] = lmer(value~structure*locality+(1+structure+locality|subj)+(1+structure+locality|item),data=subset(data,pos==3))## resolve critical interaction in region 6 using nested contrasts.nestedModel = lmer(value~structure/locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=subset(data,pos==6))
+nestedModel
+lmeModels
+contrasts(data$structure)
+contrasts(data$structure) = contr.sum(levels(data$structure))/2contrasts(data$locality) = contr.sum(levels(data$locality))/2
+contrasts(data$structure)
+library(xtable)library(sciplot)library(languageR)library(gdata)library(ez)# load datamainpath = "~/AeroFS/Drafts/RussianExtrapRCs/writeup"setwd(mainpath)files = dir(paste(mainpath,"/Results",sep=""), pattern = "dat", full.names=TRUE, recursive=FALSE)source('SPRfnx.R')data = {}for (f in files){	print(f)	data = rbind(data,read.table(f,header=F,fileEncoding="latin1"))}colnames(data) = c("subj","exp","item","cond","pos","word","region","value")data$subj = as.factor(data$subj)data$item = as.factor(data$item)data = subset(data,exp=="ExtrapRus")# create factorscondlabels = strsplit(as.character(data$cond),split="_")data$structure = as.factor(unlist(condlabels)[2*(1:length(data$cond))-1])data$locality = as.factor(unlist(condlabels)[2*(1:length(data$cond))])contrasts(data$structure) = contr.sum(levels(data$structure))/2contrasts(data$locality) = contr.sum(levels(data$locality))/2
+data = drop.levels(subset(data,pos != "?"))
+contrasts(data$structure)
+?drop.levels
+mainpath = "~/AeroFS/Drafts/RussianExtrapRCs/writeup"setwd(mainpath)files = dir(paste(mainpath,"/Results",sep=""), pattern = "dat", full.names=TRUE, recursive=FALSE)source('SPRfnx.R')data = {}for (f in files){	print(f)	data = rbind(data,read.table(f,header=F,fileEncoding="latin1"))}colnames(data) = c("subj","exp","item","cond","pos","word","region","value")data$subj = as.factor(data$subj)data$item = as.factor(data$item)data = subset(data,exp=="ExtrapRus")# create factorscondlabels = strsplit(as.character(data$cond),split="_")data$structure = as.factor(unlist(condlabels)[2*(1:length(data$cond))-1])data$locality = as.factor(unlist(condlabels)[2*(1:length(data$cond))])contrasts(data$structure) = contr.sum(levels(data$structure))/2contrasts(data$locality) = contr.sum(levels(data$locality))/2
+data = drop.levels(subset(data,pos != "?"),reorder=FALSE)
+contrasts(data$structure)
+contrasts(acc.data$structure)
+data = {}for (f in files){	print(f)	data = rbind(data,read.table(f,header=F,fileEncoding="latin1"))}colnames(data) = c("subj","exp","item","cond","pos","word","region","value")data$subj = as.factor(data$subj)data$item = as.factor(data$item)data = subset(data,exp=="ExtrapRus")# create factorscondlabels = strsplit(as.character(data$cond),split="_")data$structure = as.factor(unlist(condlabels)[2*(1:length(data$cond))-1])data$locality = as.factor(unlist(condlabels)[2*(1:length(data$cond))])contrasts(data$structure) = contr.sum(levels(data$structure))/2contrasts(data$locality) = contr.sum(levels(data$locality))/2
+contrasts(acc.data$structure)
+contrasts(data$structure)
+fdata = drop.levels(subset(data,pos != "?"),reorder=FALSE)
+contrasts(fdata$structure)
+fdata = subset(data,pos != "?")
+contrasts(fdata$structure)
+library(xtable)#
+library(sciplot)#
+library(languageR)#
+library(gdata)#
+library(ez)#
+#
+# load data#
+#
+mainpath = "~/AeroFS/Drafts/RussianExtrapRCs/writeup"#
+setwd(mainpath)#
+files = dir(paste(mainpath,"/Results",sep=""), pattern = "dat", full.names=TRUE, recursive=FALSE)#
+source('SPRfnx.R')#
+#
+data = {}#
+#
+for (f in files){#
+	print(f)#
+	data = rbind(data,read.table(f,header=F,fileEncoding="latin1"))#
+}#
+#
+colnames(data) = c("subj","exp","item","cond","pos","word","region","value")#
+data$subj = as.factor(data$subj)#
+data$item = as.factor(data$item)#
+data = subset(data,exp=="ExtrapRus")#
+#
+# create factors#
+#
+condlabels = strsplit(as.character(data$cond),split="_")#
+data$structure = as.factor(unlist(condlabels)[2*(1:length(data$cond))-1])#
+data$locality = as.factor(unlist(condlabels)[2*(1:length(data$cond))])#
+#
+## Accuracy analysis: #
+#
+acc.data = drop.levels(subset(data,pos=="?" & exp=='ExtrapRus'),reorder=FALSE)#
+contrasts(data$structure) = contr.sum(levels(data$structure))/2#
+contrasts(data$locality) = contr.sum(levels(data$locality))/2#
+acc.data$region = as.integer(as.character(acc.data$region))#
+acc.model = lmer(region~structure*locality+(1+structure+locality|subj)+(1+ structure+locality |item),data=acc.data,family="binomial")#
+#
+## RT analysis:#
+#
+data = drop.levels(subset(data,pos != "?"),reorder=FALSE)#
+contrasts(data$structure) = contr.sum(levels(data$structure))/2#
+contrasts(data$locality) = contr.sum(levels(data$locality))/2#
+data$pos = as.integer(as.character(data$pos))#
+#
+# check Latin Square is correct; check (7/31)#
+xtabs(~subj+cond,data=subset(data,pos==0))#
+#
+### outlier removal#
+### removed observations greater than 5000, less than 100; adopting thresholds from other russian paper#
+#
+N = nrow(data)#
+data = subset(data,value < 5000 & value > 100)#
+data = zscore(data,cutoff=3)#
+trim.percentage = round((1-nrow(data)/N)*100,digits=1)#
+#
+data$pos = data$pos + 1#
+#
+# lme modeling#
+#
+lmeModels = list()#
+#
+for (curPos in 1:9) {#
+	lmeModels[[curPos]] = lmer(value~structure*locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=subset(data,pos==curPos))#
+}#
+## region 3 does not converge with maximal RE structure; most maximal converging model removes interaction term random slope:#
+#
+lmeModels[[3]] = lmer(value~structure*locality+(1+structure+locality|subj)+(1+structure+locality|item),data=subset(data,pos==3))#
+#
+## resolve critical interaction in region 6 using nested contrasts.#
+#
+nestedModel = lmer(value~structure/locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=subset(data,pos==6))
+Vcov = vcov(lmeModels[[6]], useScale = FALSE)#
+betas <- round(fixef(lmeModels[[6]]),digits = 0)#
+se <-  round(sqrt(diag(Vcov)),digits=0)#
+tval = betas / se#
+pvals = 2 * pnorm(abs(tval), lower.tail = FALSE)#
+region6.summary = cbind(betas,se,tval,pvals)#
+#
+Vcov <- vcov(lmeModels[[7]], useScale = FALSE)#
+betas <- round(fixef(lmeModels[[7]]),digits = 0)#
+se <-  round(sqrt(diag(Vcov)),digits=0)#
+tval <- betas / se#
+pvals = 2 * pnorm(abs(tval), lower.tail = FALSE)#
+region7.summary = cbind(betas,se,tval,pvals)#
+#
+Vcov <- vcov(lmeModels[[9]], useScale = FALSE)#
+betas <- round(fixef(lmeModels[[9]]),digits = 0)#
+se <-  round(sqrt(diag(Vcov)),digits=0)#
+tval <- betas / se#
+pvals = 2 * pnorm(abs(tval), lower.tail = FALSE)#
+region9.summary = cbind(betas,se,tval,pvals)#
+#
+Vcov <- vcov(nestedModel, useScale = FALSE)#
+betas <- round(fixef(nestedModel),digits = 0)#
+se <-  round(sqrt(diag(Vcov)),digits=0)#
+tval <- betas / se#
+pvals = 2 * pnorm(abs(tval), lower.tail = FALSE)#
+nestedModel.summary = cbind(betas,se,tval,pvals)
+nestedModel.summary
+acc.means.bysubj = ddply(acc.data,.(subj,structure,locality),summarize,meanAcc=mean(region))#
+acc.means = ddply(acc.means.bysubj,.(structure,locality),summarize,meanAcc=mean(meanAcc), accSE=sd(meanAcc)/sqrt(length(levels(data$subj))))#
+#
+table.means = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),mean)),digits=2)#
+table.ses = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),sd))/sqrt(length(levels(data$subj))),digits=2)#
+means.table = matrix(as.vector(#
+			paste(table.means," (",as.vector(table.ses),")", sep="")#
+             ), ncol=ncol(table.means))#
+colnames(means.table) = c("Local","Non-local")#
+row.names(means.table) = c("NP","VP")#
+xtable(means.table,caption = "Mean accuracy by condition for Experiment 1. By-participant standard errors in parentheses.")
+data.means.bysubj = ddply(data,.(subj,pos,cond),summarize,meanRT=mean(value))#
+data.means = ddply(data.means.bysubj,.(cond,pos),summarize,meanRT=mean(meanRT), rtSE=sd(meanRT)/sqrt(length(levels(data$subj))))#
+#
+table.means = round(with(subset(data.means.bysubj),tapply(meanRT,list(cond,pos),mean)),digits=1)#
+table.ses = round(with(subset(data.means.bysubj),tapply(meanRT,list(cond,pos),sd))/sqrt(length(levels(data$subj))),digits=0)#
+means.table = matrix(as.vector(#
+			paste(table.means," (",as.vector(table.ses),")", sep="")#
+             ), ncol=ncol(table.means))#
+xtable(means.table,caption = "Mean RTs in each region for Experiment 1. By-participant standard errors in parentheses.")
+round(nestedModel.summary['structureNP:locality1',4],digits = 1)
+ceiling(nestedModel.summary['structureNP:locality1',4],digits = 1)
+?ceiling
+nestedModel.summary['structureNP:locality1',4]
+ceiling(nestedModel.summary['structureNP:locality1',4],digits = 2)
+round(nestedModel.summary['structureNP:locality1',4],digits = 2)
+round(nestedModel.summary['structureNP:locality1',4],digits = 1)
+round(nestedModel.summary['structureNP:locality1',4],digits = 3)
+ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))  + ggtitle("Russian Extraposition")
+library(ggplot2)#
+library("ggthemes")#
+#
+ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))  + ggtitle("Russian Extraposition")
+?quartz
+quartz(, width=7, height=4.5)#
+#
+ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))  + ggtitle("Russian Extraposition")
+quartz(, width=8, height=4.5)#
+#
+ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))  + ggtitle("Russian Extraposition")
+ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))

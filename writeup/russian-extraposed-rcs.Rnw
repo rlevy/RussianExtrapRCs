@@ -2,19 +2,27 @@
 
 \usepackage[margin=1in]{geometry}
 \usepackage{natbib}
+\usepackage{tabularx}
 
 \begin{document}
 
 
 
+%%% All the primary analysis routines are in mainAnalysis.R
+
+<<echo=FALSE,results = hide >>=
+
+source('mainAnalysis.R')
+
+@ 
+
+
 \section{Experiment}
 \label{sec:experiment}
 
-
-
 \subsection{Participants}
 
-Sixteen native Russian speakers living in or visiting the United
+Seventeen native Russian speakers living in or visiting the United
 States participated in this experiment at the University of California
 at San Diego for cash compensation.  None had arrived in the United
 States before age 13, and all reported that they continue to use
@@ -51,8 +59,75 @@ comprehension question probing the participant's understanding of the
 content of the sentence.  Written instructions in Russian were given
 at the outset of the experiment.
 
+\subsection{Data Analysis}
+\label{sec:procedure}
+
+Experimental sentences were divided into nine regions of interest as indicated in XXX. Raw reading times were analyzed independently within each region. Prior to analysis, RTs greater than 5000 ms or less than 100ms were excluded. After removing extreme outliers, RTs were further trimmed by removing observations that were more than three standard deviations from a condition mean within a given region. Trials that were incorrectly answered were not excluded from further analysis. This led to a rejection of \Sexpr{N-nrow(data)} data points (\Sexpr{trim.percentage} \% of the data overall). Response time data were analyzed linear mixed effects (LME) models. The fixed effect structure of all LME models consisted of the experimental factors \textsc{structure}, \textsc{locality}, and their interaction, using simple difference coding (\textsc{structure}: -0.5 for VP attachment,  0.5 for NP attachment;  \textsc{locality}: 0.5 for local attachment, -0.5 for non-local attachment). All mixed effects models used participants and items as random effects, with random intercepts and slopes for all fixed effects (following \cite{barr2013}). In case the model with maximal random effects structure failed to converge, slopes for the interaction term were removed. Accuracy data were analyzed using mixed effects logistic regressions with identical fixed and random effect structure. \textit{p}-values were estimated from model \textit{t}-values by approximation to the standard normal distribution (\cite{baayen2008}).   
+  
+\subsection{Results}
+\label{sec:results}
+
+\subsubsection{Comprehension Accuracy}
+\label{sec:acc}
+
+Accuracy on comprehension questions was high, indicating that participants attended to the task. By condition accuracies are provided in \ref{acctable}. Logistic mixed effects modeling of the results indicate no significant differences between conditions. 
+
+<<echo = FALSE, results = tex >>=
+
+acc.means.bysubj = ddply(acc.data,.(subj,structure,locality),summarize,meanAcc=mean(region))
+acc.means = ddply(acc.means.bysubj,.(structure,locality),summarize,meanAcc=mean(meanAcc), accSE=sd(meanAcc)/sqrt(length(levels(data$subj))))
+
+table.means = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),mean)),digits=2)
+table.ses = round(with(subset(acc.means.bysubj),tapply(meanAcc,list(structure,locality),sd))/sqrt(length(levels(data$subj))),digits=2)
+means.table = matrix(as.vector(
+			paste(table.means," (",as.vector(table.ses),")", sep="")
+             ), ncol=ncol(table.means))
+            
+colnames(means.table) = c("Local","Non-local")
+row.names(means.table) = c("NP","VP")
+            
+xtable(means.table,caption = "Mean accuracy by condition for Experiment 1. By-participant standard errors in parentheses.")
+ 
+@
+
+\subsubsection{Reading Times}
+\label{sec:rts}
+
+<<echo = FALSE, results = tex >>=
+
+data.means.bysubj = ddply(data,.(subj,pos,cond),summarize,meanRT=mean(value))
+data.means = ddply(data.means.bysubj,.(cond,pos),summarize,meanRT=mean(meanRT), rtSE=sd(meanRT)/sqrt(length(levels(data$subj))))
+
+table.means = round(with(subset(data.means.bysubj),tapply(meanRT,list(cond,pos),mean)),digits=1)
+table.ses = round(with(subset(data.means.bysubj),tapply(meanRT,list(cond,pos),sd))/sqrt(length(levels(data$subj))),digits=0)
+means.table = matrix(as.vector(
+			paste(table.means," (",as.vector(table.ses),")", sep="")
+             ), ncol=ncol(table.means))
+            
+rt.table = xtable(means.table,caption = "Mean RTs in each region for Experiment 1. By-participant standard errors in parentheses.")
+print(rt.table, tabular.environment="tabularx", width="\\textwidth",size = "scriptsize") 
+ 
+@
+
+Mean RTs in each region, along with by-participant standard error, is presented in \ref{rttable} and in \ref{rtfig}. Prior to the critical relative pronoun region, no significant effects of any experimental fixed effects were found. In the region immediately following the relative pronoun (region 6), mixed effects modeling showed a significant effect of \textsc{locality} ($\beta$ = \Sexpr{region6.summary['locality1',1]} ($\pm$ \Sexpr{region6.summary['locality1',2]}), $p <$ \Sexpr{p.print(region6.summary['locality1',4])}), and a significant interaction of \textsc{locality} and \textsc{structure} ($\beta$ = \Sexpr{region6.summary['structure1:locality1',1]} ($\pm$ \Sexpr{region6.summary['structure1:locality1',2]}), $p <$ \Sexpr{p.print(region6.summary['structure1:locality1',4])}). In region 7, there was a marginal effect of \textsc{locality} ($\beta$ = \Sexpr{region7.summary['locality1',1]} ($\pm$ \Sexpr{region7.summary['locality1',2]}), $p <$ \Sexpr{p.print(region7.summary['locality1',4])}), as well as a marginal interaction \textsc{locality} and \textsc{structure} ($\beta$ = \Sexpr{region7.summary['structure1:locality1',1]} ($\pm$ \Sexpr{region7.summary['structure1:locality1',2]}), $p <$ \Sexpr{p.print(region7.summary['structure1:locality1',4])}). Additional, in region 9 there was a significant interaction of \textsc{locality} and \textsc{structure} ($\beta$ = \Sexpr{region9.summary['structure1:locality1',1]} ($\pm$ \Sexpr{region9.summary['structure1:locality1',2]}), $p <$ \Sexpr{p.print(region9.summary['structure1:locality1',4])}), as well as a marginal effect of \textsc{locality} ($\beta$ = \Sexpr{region9.summary['locality1',1]} ($\pm$ \Sexpr{region9.summary['locality1',2]}), $p <$ \Sexpr{p.print(region9.summary['locality1',4])}).
+
+The critical interaction at region 6 was resolved by fitting a second LME model that used nested contrasts to estimate the effect of \textsc{locality} within each level of the \textsc{structure} factor. The results of this model indicate a significant effect of locality for VP attachment conditions ($\beta$ = \Sexpr{nestedModel.summary['structureVP:locality1',1]} ($\pm$ \Sexpr{nestedModel.summary['structureVP:locality1',2]}), $p <$ \Sexpr{p.print(nestedModel.summary['structureVP:locality1',4])}). There was no significant effect of locality for NP attachment conditions ($\beta$ = \Sexpr{nestedModel.summary['structureNP:locality1',1]} ($\pm$ \Sexpr{nestedModel.summary['structureNP:locality1',2]}), $p =$ \Sexpr{round(nestedModel.summary['structureNP:locality1',4],digits = 3)}).
 
 
+\begin{figure}
+\begin{center}
+<<label=mainplot,echo=FALSE,fig=TRUE,include=TRUE,width = 8.5, height=5>>=
+
+library(ggplot2)
+library("ggthemes")
+
+ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))
+
+@
+\end{center}
+\caption{Mean reading times in Experiment 1. Error bars represent standard error by participants.}
+\label{rtfig}
+\end{figure}
 
 \bibliographystyle{apalike}
 \bibliography{russian-extraposed-rcs}
