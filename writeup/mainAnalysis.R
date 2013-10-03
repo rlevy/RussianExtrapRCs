@@ -8,7 +8,7 @@ library(ez)
 
 # Load data
 
-mainpath = "~/AeroFS/Drafts/RussianExtrapRCs/writeup"
+mainpath = "~/Dropbox/Current Work/RussianExtrapRCs/writeup"
 setwd(mainpath)
 files = dir(paste(mainpath,"/Results",sep=""), pattern = "dat", full.names=TRUE, recursive=FALSE)
 source('SPRfnx.R')

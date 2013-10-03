@@ -1,14 +1,3 @@
-log(x/(1-x))
-x = .01
-log(x/(1-x))
-library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);
-biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")colnames(biography) = c("Subject","Native","State","Parent","Dominant","Other","Consent")short.biography = biography[,c("Subject","Native","Dominant")]
-biography
-biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")
-biography
-biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")
-xtabs(~Subject+Experiment,data=data)
-rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biograhical informationxtabs(~Subject+Experiment,data=results)
 library(ez)library(gdata)library(sciplot)rm(list=ls())mycols = c("Subject","MD5","TrialType","Number","Element","Experiment","Item","Sentence","Response","X","RT")results=read.csv('~/AeroFS/Studies/Hindi Agreement/Experiment5.5/Data/results.txt',header = 0, sep = ",", comment.char = "#",col.names=mycols);## Extract biograhical information
 xtabs(~Subject+Experiment,data=results)
 biography = drop.levels(subset(results,Experiment=="consent"))biography = biography[,c("Subject","Sentence","Response")]colnames(biography) = c("Subject","Question","Response")biography = reshape(biography,direction="wide",idvar="Subject",v.names="Response",timevar="Question")
@@ -384,3 +373,22 @@ quartz(, width=8, height=4.5)#
 #
 ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))  + ggtitle("Russian Extraposition")
 ggplot(data.means,aes(x=pos,y=meanRT,colour=cond)) + labs(y="Reading time",x="Region") + geom_line(stat = "identity",size=1) + geom_point(size=2.5) + geom_errorbar(aes(ymax = meanRT+rtSE,ymin=meanRT-rtSE,width=0.15)) + theme_economist()  + scale_x_discrete("Word",labels=c("1" = "SBJ","2" = "V", "3" = "OBJ", "4" = "PP," ,"5" = "RELPRO", "6" = "RELV", "7" = "P", "8" = "ADJ", "9" = "RELOBJ."),limits=c(1:9)) + scale_colour_economist(guide= guide_legend(title="Condition"),labels=c("NP, Local","NP, Nonlocal","VP, Local","VP, Nonlocal"))
+?xtable
+data.means.bysubj = ddply(data,.(subj,pos,cond),summarize,meanRT=mean(value))#
+data.means = ddply(data.means.bysubj,.(cond,pos),summarize,meanRT=mean(meanRT), rtSE=sd(meanRT)/sqrt(length(levels(data$subj))))#
+#
+table.means = round(with(subset(data.means.bysubj),tapply(meanRT,list(cond,pos),mean)),digits=1)#
+table.ses = round(with(subset(data.means.bysubj),tapply(meanRT,list(cond,pos),sd))/sqrt(length(levels(data$subj))),digits=0)#
+means.table = matrix(as.vector(#
+			paste(table.means," (",as.vector(table.ses),")", sep="")#
+             ), ncol=ncol(table.means))#
+rt.table = xtable(means.table,caption = "Mean RTs in each region for Experiment 1. By-participant standard errors in parentheses.")
+rt.table
+print(rt.table, tabular.environment="tabularx", width="\\textwidth")
+print(rt.table, tabular.environment="tabularx", size=10)
+print(rt.table, tabular.environment="tabularx", size=1)
+print(rt.table, tabular.environment="tabularx", size='1')
+print(rt.table, tabular.environment="tabularx", size='10')
+print(rt.table, tabular.environment="tabularx", size='small')
+print(rt.table, tabular.environment="tabularx")
+print(rt.table, tabular.environment="tabularx", width="\\textwidth",size="small")
