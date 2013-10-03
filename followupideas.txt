@@ -1,0 +1,19 @@
+The primary conclusion of Levy et al (2012) is that the difficulty associated with extraposed relative clauses stems from their unpredictability, which fits with the results of Staub et al: rightward movement is hard when you don't see it coming. I think this is correct, although it seems to me that at some level, this explanation leaves unresolved the question of what specific mechanism underlies the difficulty in the extraposition case. The way I've been thinking about this is that unannounced gap-filler dependencies are particularly difficult because of the memory search required: an unexpected filler triggers a memory search for its gap (which, by hypothesis, is necessary to find in order to give an interperetation to the filler). Given some assumptions about how memory search operates, the gap will be difficult to recover under certain conditions we have some idea about. The interesting claim suggested by your results is that memory search is not required for predicted dependencies (similar to claims Matt Wagers has been making): the ability to predict a dependency might allow for active maintenance of the gap position, facilitating comprehension later on. 
+
+Does that seem like a plausible hypothesis for what's going on to you? It seems like it would be pretty easy to test. We might be able to get a handle on this by manipulating whether the material that intervenes between the gap and the relative clause is high interference (i.e. with a tempting but illicit landing site for the RC), or low interference (i.e. no overt DP anywhere in sight, using a temporal adjunct clause):
+
+High Interference: The chairman consulted some executives about the company who were recently acquired by an aggressive firm
+Low Interference: The chairman consulted some executives before suddenly leaving who were recently acquired by an aggressive firm
+
+Prediction is that for this pair, the difficulty associated with extraposition will be greater for High Interference cases will be greater than in Low interference cases. This corresponds to my intuitions on examples like this; do you guys agree? 
+
+If this is correct, this would implicate memory search as a key part of the extraposition difficulty you observed. But perhaps there is potentially an alternative explanation of this contrast I'm not aware of. 
+
+It could be then interesting to compare these conditions to situations where the RC is predicted:
+
+High Interference: The chairman consulted only those executives about the company who were recently acquired by an aggressive firm
+Low Interference: The chairman consulted only those executives before suddenly leaving who were recently acquired by an aggressive firm
+
+Where one would expect the contrast between high and low interference cases to be attenuated. 
+
+What do you think? Interesting enough to merit further discussion?
