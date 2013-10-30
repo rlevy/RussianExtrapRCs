@@ -2,7 +2,8 @@
 \usepackage{geometry}                   
 \usepackage{graphicx}
 \usepackage{longtable}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T3,T2A,OT1]{fontenc}
 \usepackage{charter}
 \usepackage{amssymb}
 \usepackage[american]{babel}
@@ -21,6 +22,15 @@
 \usepackage{tipa}
 \usepackage{linguex}
 \usepackage{tabularx}
+
+\newcommand{\nom}{\textsc{nom}\xspace}
+\newcommand{\acc}{\textsc{acc}\xspace}
+\newcommand{\dat}{\textsc{dat}\xspace}
+\newcommand{\gen}{\textsc{gen}\xspace}
+\newcommand{\prep}{\textsc{prep}\xspace}
+\newcommand{\fem}{\textsc{fem}\xspace}
+\newcommand{\masc}{\textsc{masc}\xspace}
+\newcommand{\pl}{\textsc{pl}\xspace}
 
 \begin{document}
 
@@ -110,6 +120,25 @@
 source('mainAnalysis.R')
 
 @ 
+
+\section{Sample Stimulus}
+\label{sec:sample-stimulus}
+
+
+\ex. 
+\ag. Родитель позвонил учительнице класса, который выиграл недавно на олимпиаде.\\
+ Parent.\masc.\nom called teacher.\fem.\dat class.\masc.\gen, which.\masc.\nom won recently at Olympiad.\\
+``The parent called the teacher of the class$_i$ that$_i$ recently won at the Olympiad.''
+\bg. Родитель позвонил учительнице класса, которая занижала оценки иностранным ученикам.       \\
+ Parent.\masc.\nom called teacher.\fem.\dat class.\masc.\gen, who.\fem.\nom lowered grades foreign.\pl.\dat student.\pl.\dat.\\
+``The parent called the teacher$_i$ of the class who$_i$ lowered the foreign students' grades.''
+\cg. Родитель позвонил учительнице о_классе, который выиграл недавно на олимпиаде.\\
+ Parent.\masc.\nom called teacher.\fem.\dat about\_class.\masc.\prep, who.\masc.\nom won recently at Olympiad.\\
+``The parent called the teacher about the class$_i$ that$_i$ recently won at the Olympiad.''
+\dg. Родитель позвонил учительнице о_классе, которая занижала оценки иностранным ученикам. \\
+ Parent.\masc.\nom called teacher.\fem.\dat about\_class.\masc.\gen, who.\fem.\nom lowered grades foreign.\pl.\dat student.\pl.\dat.\\
+``The parent called the teacher$_i$ of the class who$_i$ lowered the foreign students' grades.''
+\z.
 
 
 \section{Experiment}
