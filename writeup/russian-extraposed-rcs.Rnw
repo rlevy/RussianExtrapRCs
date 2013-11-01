@@ -6,7 +6,7 @@
 \usepackage[T3,T2A,OT1]{fontenc}
 \usepackage{charter}
 \usepackage{amssymb}
-\usepackage[american]{babel}
+\usepackage[american,russian]{babel}
 \usepackage{epstopdf}
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{natbib}
@@ -103,7 +103,7 @@
 					\b.	\textsc{weak expectation, extraposed}: The chairman consulted the executives \_ about the company [ who was acquired recently by an aggressive rival firm ] .
 					\c.	\textsc{weak expectation, in situ}: The chairman consulted only those executives about the company which was acquired recently by an aggressive rival firm.
 					\d.	\textsc{weak expectation, extraposed}: The chairman consulted only those executives \_ about the company [ who was acquired recently by an aggressive rival firm ] .
-
+                                        \z.
 
 	In conditions where the definite lead to a weak expectation for a post-modifier, they again observed a sizable reading time slowdown for extraposed relative clauses compared to their in-situ counterparts. However, when cued with \textit{only those}, there was no difference in reading times between in-situ and extraposed relative clauses. Like the results of Staub et al, this pattern shows that comprehenders can utilize strong predictive cues to infer the presence of a gap before the rightward-moved filler is encountered. The prediction of the dependency leads to faster processing. However, Levy and colleagues argued that comprehenders did not need to be forced to adopt a gapped analysis by their grammar; instead, graded probabilistic cues are sufficient to cause comprehenders to predict a gapped analysis.
 	
@@ -115,31 +115,39 @@
 	
 %%% All the primary analysis routines are in mainAnalysis.R
 
-<<echo=FALSE,results = hide >>=
+<<echo=FALSE,cache=FALSE>>=
+library(xtable)
+library(sciplot)
+library(languageR)
+library(gdata)
+library(ez)
+library(plyr)
+@ 
 
+<<mainAnalysis,echo=FALSE,results = hide, cache=TRUE >>=
 source('mainAnalysis.R')
-
 @ 
 
 \section{Sample Stimulus}
 \label{sec:sample-stimulus}
 
 
+%\selectlanguage{russian}
 \ex. 
 \ag. Родитель позвонил учительнице класса, который выиграл недавно на олимпиаде.\\
- Parent.\masc.\nom called teacher.\fem.\dat class.\masc.\gen, which.\masc.\nom won recently at Olympiad.\\
+ {Parent.\masc.\nom} called {teacher.\fem.\dat} {class.\masc.\gen}, {which.\masc.\nom} won recently at Olympiad.\\
 ``The parent called the teacher of the class$_i$ that$_i$ recently won at the Olympiad.''
 \bg. Родитель позвонил учительнице класса, которая занижала оценки иностранным ученикам.       \\
- Parent.\masc.\nom called teacher.\fem.\dat class.\masc.\gen, who.\fem.\nom lowered grades foreign.\pl.\dat student.\pl.\dat.\\
+ {Parent.\masc.\nom} called {teacher.\fem.\dat} {class.\masc.\gen}, {who.\fem.\nom} lowered grades {foreign.\pl.\dat} {student.\pl.\dat}.\\
 ``The parent called the teacher$_i$ of the class who$_i$ lowered the foreign students' grades.''
-\cg. Родитель позвонил учительнице о_классе, который выиграл недавно на олимпиаде.\\
- Parent.\masc.\nom called teacher.\fem.\dat about\_class.\masc.\prep, who.\masc.\nom won recently at Olympiad.\\
+\cg. Родитель позвонил учительнице о\_классе, который выиграл недавно на олимпиаде.\\
+ {Parent.\masc.\nom} called {teacher.\fem.\dat} {about\_class.\masc.\prep}, {who.\masc.\nom} won recently at Olympiad.\\
 ``The parent called the teacher about the class$_i$ that$_i$ recently won at the Olympiad.''
-\dg. Родитель позвонил учительнице о_классе, которая занижала оценки иностранным ученикам. \\
- Parent.\masc.\nom called teacher.\fem.\dat about\_class.\masc.\gen, who.\fem.\nom lowered grades foreign.\pl.\dat student.\pl.\dat.\\
+\dg. Родитель позвонил учительнице о\_классе, которая занижала оценки иностранным ученикам. \\
+ {Parent.\masc.\nom} called {teacher.\fem.\dat} {about\_class.\masc.\gen}, {who.\fem.\nom} lowered grades {foreign.\pl.\dat} {student.\pl.\dat}.\\
 ``The parent called the teacher$_i$ of the class who$_i$ lowered the foreign students' grades.''
 \z.
-
+%\selectlanguage{english}
 
 \section{Experiment}
 \label{sec:experiment}
