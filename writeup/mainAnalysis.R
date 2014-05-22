@@ -40,7 +40,7 @@ acc.data = drop.levels(subset(data,pos=="?" & exp=='ExtrapRus'),reorder=FALSE)
 contrasts(data$structure) = contr.sum(levels(data$structure))/2
 contrasts(data$locality) = contr.sum(levels(data$locality))/2
 acc.data$region = as.integer(as.character(acc.data$region))
-acc.model = lmer(region~structure*locality+(1+structure+locality|subj)+(1+ structure+locality |item),data=acc.data,family="binomial")
+acc.model = glmer(region~structure*locality+(1+structure+locality|subj)+(1+ structure+locality |item),data=acc.data,family="binomial")
 
 ## RT analysis below here ##
 ############################
@@ -58,7 +58,7 @@ xtabs(~subj+cond,data=subset(data,pos==0))
 
 N = nrow(data)
 data = subset(data,value < 5000 & value > 100)
-data = zscore(data,cutoff=3)
+data = zscoreRegion(data,cutoff=3)
 trim.percentage = round((1-nrow(data)/N)*100,digits=1)
 
 data$pos = data$pos + 1
@@ -70,16 +70,16 @@ data$pos = data$pos + 1
 lmeModels = list()
 
 for (curPos in 1:9) {
-	lmeModels[[curPos]] = lmer(value~structure*locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=subset(data,pos==curPos))
+	lmeModels[[curPos]] = lmer(value~structure*locality+(1+ structure*locality|subj)+(1+ structure*locality|item),control=lmerControl(optimizer="bobyqa"),data=subset(data,pos==curPos))
 }
 
 ## Region 3 does not converge with maximal RE structure; most maximal converging model removes interaction term random slope:
 
-lmeModels[[3]] = lmer(value~structure*locality+(1+structure+locality|subj)+(1+structure+locality|item),data=subset(data,pos==3))
+lmeModels[[3]] = lmer(value~structure*locality+(1+structure+locality|subj)+(1+structure+locality|item),control=lmerControl(optimizer="bobyqa"),data=subset(data,pos==3))
 
 ## Resolve critical interaction in region 6 using nested contrasts.
 
-nestedModel = lmer(value~structure/locality+(1+ structure*locality|subj)+(1+ structure*locality|item),data=subset(data,pos==6))
+nestedModel = lmer(value~structure/locality+(1+ structure*locality|subj)+(1+ structure*locality|item),control=lmerControl(optimizer="bobyqa"),data=subset(data,pos==6))
 
 ## Regions 6, 7 and 9 have significant or marginal effects
 ## Here summaries of fixed effects are created for easy referencing in the TeX document

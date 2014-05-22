@@ -30,6 +30,17 @@ zscore <- function(data,cutoff=3) {
 	return(data)
 }
 
+
+zscoreRegion <- function(data,cutoff=3) {
+	means <- tapply(data$value, list(data$region), mean)
+	sds <- tapply(data$value, list(data$region), sd)
+	zscore <- (data$value-means[data$region])/sds[data$region]
+	data <- cbind(data,zscore)
+	data <- subset(data, abs(zscore) < cutoff )
+	return(data)
+}
+
+
 fitResids <- function(data,spill=T) {
 	rownames(data) = c(1:nrow(data))
 	if (spill==F) {
