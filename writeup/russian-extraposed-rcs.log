@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  22 MAY 2014 11:30
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  22 MAY 2014 11:46
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -567,7 +567,14 @@ Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
 \TX@cols=\count120
 \TX@ftn=\toks30
 )
-(./russian-extraposed-rcs.aux)
+(./russian-extraposed-rcs.aux
+
+LaTeX Warning: Label `rcex' multiply defined.
+
+
+LaTeX Warning: Label `sec:experiment' multiply defined.
+
+)
 \openout1 = `russian-extraposed-rcs.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 25.
@@ -584,8 +591,7 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 25.
 LaTeX Font Info:    ... okay on input line 25.
 LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 25.
 LaTeX Font Info:    Try loading font information for T3+cmr on input line 25.
-
-(/usr/local/texlive/2012/texmf-dist/tex/latex/tipa/t3cmr.fd
+ (/usr/local/texlive/2012/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
 LaTeX Font Info:    ... okay on input line 25.
@@ -641,142 +647,338 @@ LaTeX Font Info:    ... okay on input line 25.
 
 LaTeX Warning: Reference `dep' on page 1 undefined on input line 35.
 
-
-LaTeX Warning: Reference `rcex' on page 1 undefined on input line 35.
-
 [1
 
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-
-LaTeX Warning: Reference `rightmove' on page 2 undefined on input line 41.
-
-
-LaTeX Warning: Reference `rightmove' on page 2 undefined on input line 50.
-
-
-LaTeX Warning: Reference `stauboblig' on page 2 undefined on input line 50.
-
-
-LaTeX Warning: Reference `stauboptional' on page 2 undefined on input line 50.
-
 [2]
-
-LaTeX Warning: Reference `levysubj' on page 3 undefined on input line 56.
-
-
-LaTeX Warning: Reference `levyobj' on page 3 undefined on input line 56.
-
-
-LaTeX Warning: Reference `levyobj' on page 3 undefined on input line 68.
-
-
-LaTeX Warning: Reference `levyobj:b' on page 3 undefined on input line 68.
-
-
-LaTeX Warning: Reference `levyobj:d' on page 3 undefined on input line 68.
-
 ./russian-extraposed-rcs.tex:68: Undefined control sequence.
 l.68 ...mber of words between the head noun \texit
                                                   {star} and the the relativ...
 
 ? 
-
-LaTeX Warning: Reference `levyobj:b' on page 3 undefined on input line 68.
-
-
-LaTeX Warning: Reference `levyobj:d' on page 3 undefined on input line 68.
-
 ./russian-extraposed-rcs.tex:68: Undefined control sequence.
 l.68 ...n-situ, modifying the constituent \texitit
                                                   {the star of the movie}. L...
 
 ? 
-
-LaTeX Warning: Reference `levyobj:b' on page 3 undefined on input line 68.
-
-[3]
-
-LaTeX Warning: Reference `levyobj:b' on page 4 undefined on input line 70.
-
-[4] [5]
-
-Package natbib Warning: Citation `rohde:lingermanual' on page 6 undefined on in
-put line 124.
-
-
-Package natbib Warning: Citation `barr2013' on page 6 undefined on input line 1
-39.
-
-
-Package natbib Warning: Citation `baayen2008' on page 6 undefined on input line
- 139.
-
-
-LaTeX Warning: Reference `acctable' on page 6 undefined on input line 147.
-
-[6]
-LaTeX Font Info:    Try loading font information for U+msa on input line 153.
- (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
+[3] [4] [5]
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc 
+                        .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc .\nom 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem 
+                        .\dat 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem .\dat 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {class.\masc 
+                        .\gen },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {class.\masc .\gen 
+                              },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> which.\masc 
+                       .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> which.\masc .\nom 
+                             
+l.136 
+      
+? 
+LaTeX Font Info:    Try loading font information for U+msa on input line 136.
+(/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2009/06/22 v3.00 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 153.
+LaTeX Font Info:    Try loading font information for U+msb on input line 136.
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2009/06/22 v3.00 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+stmry on input line 153.
+LaTeX Font Info:    Try loading font information for U+stmry on input line 136.
 
 
 (/usr/local/texlive/2012/texmf-dist/tex/latex/stmaryrd/Ustmry.fd)
-Overfull \hbox (42.57253pt too wide) in alignment at lines 180--180
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc 
+                        .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc .\nom 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem 
+                        .\dat 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem .\dat 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {class.\masc 
+                        .\gen },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {class.\masc .\gen 
+                              },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> who.\fem 
+                    .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> who.\fem .\nom 
+                          
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> foreign.\pl 
+                       .\dat 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> foreign.\pl .\dat 
+                             
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {student.\pl 
+                        .\dat }.
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {student.\pl .\dat 
+                              }.
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc 
+                        .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc .\nom 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem 
+                        .\dat 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem .\dat 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {about\_class.\masc 
+                               .\prep },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {about\_class.\masc .\prep 
+                                      },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> who.\masc 
+                     .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> who.\masc .\nom 
+                           
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc 
+                        .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> Parent.\masc .\nom 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem 
+                        .\dat 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> teacher.\fem .\dat 
+                              
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {about\_class.\masc 
+                               .\gen },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {about\_class.\masc .\gen 
+                                     },
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> who.\fem 
+                    .\nom 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> who.\fem .\nom 
+                          
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> foreign.\pl 
+                       .\dat 
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> foreign.\pl .\dat 
+                             
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {student.\pl 
+                        .\dat }.
+l.136 
+      
+? 
+./russian-extraposed-rcs.tex:136: Undefined control sequence.
+<argument> {student.\pl .\dat 
+                              }.
+l.136 
+      
+? 
+
+Package natbib Warning: Citation `rohde:lingermanual' on page 6 undefined on in
+put line 146.
+
+[6]
+
+Package natbib Warning: Citation `barr2013' on page 7 undefined on input line 1
+61.
+
+
+Package natbib Warning: Citation `baayen2008' on page 7 undefined on input line
+ 161.
+
+
+LaTeX Warning: Reference `acctable' on page 7 undefined on input line 169.
+
+
+Overfull \hbox (42.57253pt too wide) in alignment at lines 202--202
 [][][][][][][][][][] 
  []
 
 
-LaTeX Warning: Reference `rttable' on page 7 undefined on input line 184.
+LaTeX Warning: Reference `rttable' on page 7 undefined on input line 206.
 
-
-LaTeX Warning: Reference `rtfig' on page 7 undefined on input line 184.
-
-<russian-extraposed-rcs-mainplot.pdf, id=28, 614.295pt x 361.35pt>
+[7] <russian-extraposed-rcs-mainplot.pdf, id=33, 614.295pt x 361.35pt>
 File: russian-extraposed-rcs-mainplot.pdf Graphic file (type pdf)
 
 <use russian-extraposed-rcs-mainplot.pdf>
 Package pdftex.def Info: russian-extraposed-rcs-mainplot.pdf used on input line
- 191.
+ 213.
 (pdftex.def)             Requested size: 344.005pt x 202.35461pt.
 
 No file russian-extraposed-rcs.bbl.
 
 Package natbib Warning: There were undefined citations.
 
-[7] [8 <./russian-extraposed-rcs-mainplot.pdf>] (./russian-extraposed-rcs.aux)
+[8] [9 <./russian-extraposed-rcs-mainplot.pdf>] (./russian-extraposed-rcs.aux)
 
 LaTeX Warning: There were undefined references.
 
 
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 11708 strings out of 493488
- 196700 string characters out of 3141326
- 244262 words of memory out of 3000000
- 14688 multiletter control sequences out of 15000+200000
+ 11715 strings out of 493488
+ 196740 string characters out of 3141326
+ 246584 words of memory out of 3000000
+ 14695 multiletter control sequences out of 15000+200000
  34347 words of font info for 73 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
  49i,8n,53p,1573b,285s stack positions out of 5000i,500n,10000p,200000b,50000s
 </usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb>
 </usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb>
 </usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
-/usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></u
-sr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/
-local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/l
-ocal/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on russian-extraposed-rcs.pdf (8 pages, 112752 bytes).
+/usr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></u
+sr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
+/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/lo
+cal/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
+al/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on russian-extraposed-rcs.pdf (9 pages, 121246 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
- 49 compressed objects within 1 object stream
+ 76 PDF objects out of 1000 (max. 8388607)
+ 54 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  18 words of extra memory for PDF output out of 10000 (max. 10000000)
 
