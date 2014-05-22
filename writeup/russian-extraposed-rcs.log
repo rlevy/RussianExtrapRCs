@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  22 MAY 2014 11:46
+This is pdfTeX, Version 3.1415926-2.4-1.40.13 (TeX Live 2012) (format=pdflatex 2012.6.30)  22 MAY 2014 14:42
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -650,18 +650,7 @@ LaTeX Warning: Reference `dep' on page 1 undefined on input line 35.
 [1
 
 {/usr/local/texlive/2012/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-[2]
-./russian-extraposed-rcs.tex:68: Undefined control sequence.
-l.68 ...mber of words between the head noun \texit
-                                                  {star} and the the relativ...
-
-? 
-./russian-extraposed-rcs.tex:68: Undefined control sequence.
-l.68 ...n-situ, modifying the constituent \texitit
-                                                  {the star of the movie}. L...
-
-? 
-[3] [4] [5]
+[2] [3] [4] [5]
 ./russian-extraposed-rcs.tex:136: Undefined control sequence.
 <argument> Parent.\masc 
                         .\nom 
@@ -932,7 +921,7 @@ Package natbib Warning: Citation `baayen2008' on page 7 undefined on input line
 LaTeX Warning: Reference `acctable' on page 7 undefined on input line 169.
 
 
-Overfull \hbox (42.57253pt too wide) in alignment at lines 202--202
+Overfull \hbox (46.82043pt too wide) in alignment at lines 202--202
 [][][][][][][][][][] 
  []
 
@@ -962,7 +951,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  11715 strings out of 493488
  196740 string characters out of 3141326
- 246584 words of memory out of 3000000
+ 246593 words of memory out of 3000000
  14695 multiletter control sequences out of 15000+200000
  34347 words of font info for 73 fonts, out of 3000000 for 9000
  957 hyphenation exceptions out of 8191
@@ -975,7 +964,7 @@ sr/local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr
 /local/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/lo
 cal/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/loc
 al/texlive/2012/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on russian-extraposed-rcs.pdf (9 pages, 121246 bytes).
+Output written on russian-extraposed-rcs.pdf (9 pages, 121165 bytes).
 PDF statistics:
  76 PDF objects out of 1000 (max. 8388607)
  54 compressed objects within 1 object stream
